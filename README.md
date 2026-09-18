@@ -1,105 +1,89 @@
 # Retrieva
 
-A full-stack Retrieval-Augmented Generation (RAG) application that lets users upload documents and ask questions about them, with answers grounded in and cited from the source material.
+Full-stack RAG (Retrieval-Augmented Generation) application — upload documents, ask questions about them, get answers grounded in and cited from the source material.
 
-> Built as a portfolio project to demonstrate practical AI application engineering — document ingestion, vector search, LLM orchestration, and a production-style full-stack architecture.
+This repo contains a Spring Boot + React implementation combining:
 
-## Features
+- JWT-based auth with cookie session handling
+- PDF/DOCX text extraction via Apache Tika
+- Vector search with pgvector (Postgres)
+- LLM-generated answers with source-chunk citations
+- Streaming responses over the chat interface
 
-- 🔐 **JWT-based authentication** — secure login/register with cookie-based session handling
-- 📄 **Document upload & processing** — PDF/DOCX text extraction and chunking
-- 🔍 **Semantic search** — embeddings stored and queried via pgvector
-- 💬 **Conversational Q&A** — ask natural-language questions about uploaded documents
-- 📌 **Source citations** — every answer links back to the exact document chunks it was grounded in
-- ⚡ **Streaming responses** — token-by-token answer generation for a responsive feel
+## Disclaimer
 
-## Tech Stack
+This is a portfolio project — it's functional but not production-hardened. Some notes before you dive in:
 
-### Backend
-- **Java 21 / Spring Boot** — REST API, application logic
-- **Spring Security** — JWT authentication
-- **PostgreSQL + pgvector** — relational data storage and vector similarity search in one database
-- **Apache Tika** — document text extraction (PDF, DOCX, etc.)
-- **OpenAI API** — embeddings (`text-embedding-3-small`) and chat completion (`gpt-4o-mini`)
+- No test suite yet
+- Error handling is minimal in a few places
+- You'll need your own OpenAI API key
+- Local Postgres needs the `pgvector` extension enabled manually
 
-### Frontend
-- **React + TypeScript** (Vite)
-- **Tailwind CSS**
+If you're looking for a polished, production-ready RAG service, this isn't it. But if you want to see a working full-stack RAG pipeline end to end — auth, ingestion, retrieval, generation — check it out.
 
-### Infrastructure
-- Backend hosted on [Railway / Render / Fly.io]
-- Frontend hosted on [Vercel / Netlify]
+## Quick Start
 
-## Architecture
-
-```
-┌─────────────┐      ┌──────────────────┐      ┌─────────────────┐
-│   React UI  │─────▶│  Spring Boot API │─────▶│  PostgreSQL +    │
-│             │◀─────│                  │◀─────│  pgvector        │
-└─────────────┘      └──────────────────┘      └─────────────────┘
-                              │
-                              ▼
-                      ┌──────────────┐
-                      │  OpenAI API  │
-                      │ (embed + LLM)│
-                      └──────────────┘
-```
-
-**Ingestion flow:** Upload → Extract text (Tika) → Chunk → Embed → Store in pgvector
-
-**Query flow:** Question → Embed → Similarity search (top-k chunks) → Prompt LLM with context → Stream answer + cited sources
-
-## Getting Started
-
-### Prerequisites
-- Java 21+
-- Node.js 18+
-- PostgreSQL 15+ with the `pgvector` extension enabled
-- An OpenAI API key
-
-### Backend Setup
+Clone and set up the backend:
 
 ```bash
-cd backend
+git clone https://github.com/<your-username>/groundwork.git
+cd groundwork/backend
 cp .env.example .env
-# Add your DB credentials and OPENAI_API_KEY to .env
+# add your DB credentials and OPENAI_API_KEY to .env
 
 ./mvnw spring-boot:run
 ```
 
-### Frontend Setup
+Set up the frontend:
 
 ```bash
-cd frontend
+cd ../frontend
 npm install
 npm run dev
 ```
 
-### Database Setup
+Enable pgvector on your local Postgres instance:
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS vector;
 ```
 
-Run the included migration scripts (`backend/src/main/resources/db/migration`) to set up the schema.
+## Usage
 
-## API Overview
+1. Register/log in through the frontend (or `POST /api/v1/users` and `/api/v1/login` directly).
+2. Upload a PDF via the document upload screen.
+3. Once processed, ask a question in the chat panel — the answer streams in with citations to the source chunks it was grounded in.
 
-| Method | Endpoint                  | Description                          |
-|--------|----------------------------|---------------------------------------|
-| POST   | `/api/v1/users`            | Register a new user                   |
-| POST   | `/api/v1/login`             | Authenticate and receive a JWT cookie |
-| POST   | `/api/v1/documents`         | Upload a document for ingestion       |
-| GET    | `/api/v1/documents`         | List uploaded documents               |
-| POST   | `/api/v1/query`             | Ask a question, get an answer + sources |
+### API Endpoints
+
+| Method | Endpoint             | Description                          |
+|--------|------------------------|---------------------------------------|
+| POST   | `/api/v1/users`        | Register a new user                   |
+| POST   | `/api/v1/login`        | Authenticate, receive a JWT cookie    |
+| POST   | `/api/v1/documents`    | Upload a document for ingestion       |
+| GET    | `/api/v1/documents`    | List uploaded documents               |
+| POST   | `/api/v1/query`        | Ask a question, get an answer + sources |
+
+## Pipeline
+
+**Ingestion:** Upload → extract text (Tika) → chunk → embed (`text-embedding-3-small`) → store in pgvector
+
+**Query:** Question → embed → similarity search (top-k chunks) → prompt LLM with retrieved context → stream answer + cited sources
+
+## Tech Stack
+
+- **Backend:** Java 21, Spring Boot, Spring Security, Spring Data JPA
+- **Database:** PostgreSQL + pgvector
+- **AI:** OpenAI API (embeddings + chat)
+- **Frontend:** React, TypeScript, Vite, Tailwind CSS
+- **Document parsing:** Apache Tika
 
 ## Roadmap
 
 - [ ] Multi-turn conversation memory
-- [ ] Support for additional file types (Markdown, HTML)
 - [ ] Hybrid search (keyword + semantic)
-- [ ] Usage/cost tracking dashboard
-- [ ] Role-based access (shared vs. private document collections)
+- [ ] Additional file type support (Markdown, HTML)
+- [ ] Role-based document access
 
 ## Demo
 
