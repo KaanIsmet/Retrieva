@@ -2,10 +2,10 @@
 
 Full-stack RAG (Retrieval-Augmented Generation) application — upload documents, ask questions about them, get answers grounded in and cited from the source material.
 
-This repo contains a Spring Boot + React implementation combining:
+This repo contains a FastAPI + React implementation combining:
 
 - JWT-based auth with cookie session handling
-- PDF/DOCX text extraction via Apache Tika
+- PDF/DOCX text extraction via `unstructured` / `pypdf`
 - Vector search with pgvector (Postgres)
 - LLM-generated answers with source-chunk citations
 - Streaming responses over the chat interface
@@ -31,7 +31,11 @@ cd groundwork/backend
 cp .env.example .env
 # add your DB credentials and OPENAI_API_KEY to .env
 
-./mvnw spring-boot:run
+python -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+
+uvicorn main:app --reload
 ```
 
 Set up the frontend:
@@ -66,17 +70,17 @@ CREATE EXTENSION IF NOT EXISTS vector;
 
 ## Pipeline
 
-**Ingestion:** Upload → extract text (Tika) → chunk → embed (`text-embedding-3-small`) → store in pgvector
+**Ingestion:** Upload → extract text (`unstructured`/`pypdf`) → chunk → embed (`text-embedding-3-small`) → store in pgvector
 
 **Query:** Question → embed → similarity search (top-k chunks) → prompt LLM with retrieved context → stream answer + cited sources
 
 ## Tech Stack
 
-- **Backend:** Java 21, Spring Boot, Spring Security, Spring Data JPA
+- **Backend:** Python 3.12, FastAPI, Pydantic, SQLAlchemy
 - **Database:** PostgreSQL + pgvector
 - **AI:** OpenAI API (embeddings + chat)
 - **Frontend:** React, TypeScript, Vite, Tailwind CSS
-- **Document parsing:** Apache Tika
+- **Document parsing:** `unstructured` / `pypdf`
 
 ## Roadmap
 
