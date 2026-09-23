@@ -26,16 +26,13 @@ If you're looking for a polished, production-ready RAG service, this isn't it. B
 Clone and set up the backend:
 
 ```bash
-git clone https://github.com/<your-username>/groundwork.git
-cd groundwork/backend
-cp .env.example .env
-# add your DB credentials and OPENAI_API_KEY to .env
+git clone https://github.com/KaanIsmet/Retrieva.git
+cd Retrieva
+cp .env.example .env   # when added: DB credentials and OPENAI_API_KEY
 
-python -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
-
-uvicorn main:app --reload
+uv sync
+uv run dev
+# or: uvicorn main:app --app-dir backend/src --reload
 ```
 
 Set up the frontend:
