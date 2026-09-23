@@ -20,6 +20,10 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
 ]
+dependencies = [
+    "fastapi>=0.141.1",
+    "uvicorn[standard]>=0.30",
+]
 
 [project.optional-dependencies]
 dev = [
@@ -33,6 +37,9 @@ dev = [
 Homepage = "https://github.com/KaanIsmet/Retrieva"
 Repository = "https://github.com/KaanIsmet/Retrieva"
 Issues = "https://github.com/KaanIsmet/Retrieva/issues"
+
+[tool.uv.scripts]
+dev = "uvicorn main:app --app-dir src --reload --host 127.0.0.1 --port 8000"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/retrieva"]
