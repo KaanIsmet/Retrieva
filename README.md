@@ -2,7 +2,7 @@
 
 Full-stack RAG (Retrieval-Augmented Generation) application — upload documents, ask questions about them, get answers grounded in and cited from the source material.
 
-This repo contains a FastAPI + React implementation combining:
+This repo contains a FastAPI + Gradio implementation combining:
 
 - JWT-based auth with cookie session handling
 - PDF/DOCX text extraction via `unstructured` / `pypdf`
@@ -16,54 +16,8 @@ This is a portfolio project — it's functional but not production-hardened. Som
 
 - No test suite yet
 - Error handling is minimal in a few places
-- You'll need your own OpenAI API key
-- Local Postgres needs the `pgvector` extension enabled manually
 
-If you're looking for a polished, production-ready RAG service, this isn't it. But if you want to see a working full-stack RAG pipeline end to end — auth, ingestion, retrieval, generation — check it out.
 
-## Quick Start
-
-Clone and set up the backend:
-
-```bash
-git clone https://github.com/KaanIsmet/Retrieva.git
-cd Retrieva
-cp .env.example .env   # when added: DB credentials and OPENAI_API_KEY
-
-uv sync
-uv run dev
-# or: uvicorn main:app --app-dir backend/src --reload
-```
-
-Set up the frontend:
-
-```bash
-cd ../frontend
-npm install
-npm run dev
-```
-
-Enable pgvector on your local Postgres instance:
-
-```sql
-CREATE EXTENSION IF NOT EXISTS vector;
-```
-
-## Usage
-
-1. Register/log in through the frontend (or `POST /api/v1/users` and `/api/v1/login` directly).
-2. Upload a PDF via the document upload screen.
-3. Once processed, ask a question in the chat panel — the answer streams in with citations to the source chunks it was grounded in.
-
-### API Endpoints
-
-| Method | Endpoint             | Description                          |
-|--------|------------------------|---------------------------------------|
-| POST   | `/api/v1/users`        | Register a new user                   |
-| POST   | `/api/v1/login`        | Authenticate, receive a JWT cookie    |
-| POST   | `/api/v1/documents`    | Upload a document for ingestion       |
-| GET    | `/api/v1/documents`    | List uploaded documents               |
-| POST   | `/api/v1/query`        | Ask a question, get an answer + sources |
 
 ## Pipeline
 
@@ -76,8 +30,9 @@ CREATE EXTENSION IF NOT EXISTS vector;
 - **Backend:** Python 3.12, FastAPI, Pydantic, SQLAlchemy
 - **Database:** PostgreSQL + pgvector
 - **AI:** OpenAI API (embeddings + chat)
-- **Frontend:** React, TypeScript, Vite, Tailwind CSS
-- **Document parsing:** `unstructured` / `pypdf`
+- **Frontend:** Gradio
+- **Document parsing:** `unstructured` / `pypdf`]
+- **Host Platforms:** Hugging Face Spaces
 
 ## Roadmap
 

@@ -1,0 +1,178 @@
+# =============================================================================
+# Fullstack Python (backend) + React (frontend) .gitignore
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Python
+# -----------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# Packaging / build
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+MANIFEST
+
+# Testing / coverage
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.cover
+.hypothesis/
+
+# Type checkers / linters
+.mypy_cache/
+.pytype/
+.pyre/
+.ruff_cache/
+.dmypy.json
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+/media/
+/staticfiles/
+
+# Flask
+instance/
+.webassets-cache
+
+# Alembic / migrations (uncomment if you don't track them)
+# migrations/versions/*.py
+
+# -----------------------------------------------------------------------------
+# Node / React
+# -----------------------------------------------------------------------------
+node_modules/
+.pnp
+.pnp.js
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Build output
+frontend/build/
+frontend/dist/
+frontend/.next/
+frontend/out/
+.parcel-cache/
+.vite/
+.turbo/
+.cache/
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Testing
+frontend/coverage/
+.nyc_output/
+
+# Storybook
+storybook-static/
+
+# -----------------------------------------------------------------------------
+# Environment variables & secrets
+# -----------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+secrets.json
+credentials.json
+
+# -----------------------------------------------------------------------------
+# Databases & local data
+# -----------------------------------------------------------------------------
+*.sqlite
+*.sqlite3
+*.db
+pgdata/
+data/
+*.rdb
+
+# -----------------------------------------------------------------------------
+# Docker
+# -----------------------------------------------------------------------------
+docker-compose.override.yml
+.docker/
+
+# -----------------------------------------------------------------------------
+# Logs & temp files
+# -----------------------------------------------------------------------------
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# -----------------------------------------------------------------------------
+# Editors & IDEs
+# -----------------------------------------------------------------------------
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+.settings/
+
+# -----------------------------------------------------------------------------
+# OS files
+# -----------------------------------------------------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# -----------------------------------------------------------------------------
+# Deployment / infrastructure
+# -----------------------------------------------------------------------------
+.terraform/
+*.tfstate
+*.tfstate.*
+.vercel
+.netlify
+.serverless/
