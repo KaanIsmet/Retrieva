@@ -1,7 +1,7 @@
 services:
   
   app:
-    image: analytics-api:v1
+    image: retrieva:v1
     build:
       context: .
       dockerfile: Dockerfile.web
