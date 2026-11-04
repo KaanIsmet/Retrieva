@@ -1,10 +1,9 @@
 # Retrieva
 
-Full-stack RAG (Retrieval-Augmented Generation) application — upload documents, ask questions about them, get answers grounded in and cited from the source material.
+Full-stack RAG (Retrieval-Augmented Generation) Research Assistant — upload documents, ask questions about them, get answers grounded in and cited from the source material.
 
 This repo contains a FastAPI + Gradio implementation combining:
 
-- JWT-based auth with cookie session handling
 - PDF/DOCX text extraction via `unstructured` / `pypdf`
 - Vector search with pgvector (Postgres)
 - LLM-generated answers with source-chunk citations
