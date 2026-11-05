@@ -23,6 +23,9 @@ classifiers = [
 dependencies = [
     "fastapi>=0.141.1",
     "uvicorn[standard]>=0.30",
+    "pgvector",
+    "sqlalchemy>=2.0.20",
+    "alembic>=1.15.0",
 ]
 
 [project.optional-dependencies]
