@@ -26,6 +26,9 @@ dependencies = [
     "pgvector",
     "sqlalchemy>=2.0.20",
     "alembic>=1.15.0",
+    "psycopg[binary]>=3.2",
+    "pwdlib[argon2]>=0.2",
+    "python-dotenv>=1.0",
 ]
 
 [project.optional-dependencies]
@@ -41,11 +44,11 @@ Homepage = "https://github.com/KaanIsmet/Retrieva"
 Repository = "https://github.com/KaanIsmet/Retrieva"
 Issues = "https://github.com/KaanIsmet/Retrieva/issues"
 
-[tool.uv.scripts]
-dev = "uvicorn main:app --app-dir backend/src --reload --host 127.0.0.1 --port 8000"
+[project.scripts]
+dev = "uvicorn.main:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["backend/src/retrieva"]
+packages = ["src/retrieva"]
 
 [tool.ruff]
 line-length = 100
