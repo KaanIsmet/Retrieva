@@ -34,4 +34,15 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)) -> User:
 
 @user_router.get("/", response_model=list[UserRead])
 def get_users(db: Session = Depends(get_db)) -> list[User]:
+
     return list(db.scalars(select(User).order_by(User.id)).all())
+
+@user_router.get("/{id}", response_model=UserRead)
+def get_user(user_id, db: Session = Depends(get_db)) -> User:
+    user = db.get(User, user_id)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Unable to find user by id"
+        )
+    return user
