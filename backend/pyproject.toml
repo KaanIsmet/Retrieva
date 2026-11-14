@@ -30,6 +30,9 @@ dependencies = [
     "psycopg[binary]>=3.2",
     "pwdlib[argon2]>=0.2",
     "python-dotenv>=1.0",
+    "ollama>=0.6.3",
+    "pypdf>=7.0.1",
+    "gradio>=6.32.0",
 ]
 
 [project.optional-dependencies]
