@@ -36,3 +36,6 @@ class DocumentUpdate(BaseModel):
     description: str | None = None
 
     model_config = ConfigDict(extra="forbid")
+
+class ChatRequest(BaseModel):
+    message: str = Field(min_length=1)

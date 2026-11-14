@@ -1,5 +1,5 @@
 
-from services.document_processing import index_files
+from services.document_processing import index_files, answer as generate_answer
 
 from sqlalchemy import select
 from database import get_db
@@ -7,7 +7,8 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, s
 from models.stored_file import StoredFile
 from sqlalchemy.orm import Session
 
-from schemas.document import DocumentCreate, DocumentRead
+
+from schemas.document import ChatRequest, DocumentCreate, DocumentRead
 from services.save_document import delete_saved_file, save_document
 document_router = APIRouter(prefix="/document", tags=["document"])
 
@@ -74,6 +75,7 @@ def process_document(document_id: int, db: Session = Depends(get_db)):
 
 
 @document_router.post("/chat", status_code=status.HTTP_200_OK)
-def chat_model(db: Session = Depends(get_db)):
+def chat_model(request: ChatRequest, db: Session = Depends(get_db)):
     
-    return {"message": "sent answer"}
+    parts = list(generate_answer(db, request.message, history=[]))
+    return {"answer": parts[-1] if parts else ""}
