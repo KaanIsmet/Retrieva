@@ -1,6 +1,6 @@
-from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 from fastapi import UploadFile
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class DocumentCreate(BaseModel):
@@ -11,9 +11,15 @@ class DocumentCreate(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
 class DocumentRead(BaseModel):
-    filename: str
+    model_config = ConfigDict(from_attributes=True)
 
+    id: int
+    filename: str = Field(validation_alias="original_name")
     title: str | None = None
+    content_type: str
+    size: int
+    description: str | None = None
+    uploaded_at: datetime
 
 class DocumentResponse(BaseModel):
     id: int
