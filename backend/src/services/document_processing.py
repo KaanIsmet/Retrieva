@@ -22,9 +22,12 @@ SYSTEM_PROMPT = (
 
 
 def load_text(path: str) -> str:
-    if path.lower().endswith(".pdf"):
-        return "\n".join(page.extract_text() or "" for page in PdfReader(path).pages)
-    return Path(path).read_text(errors="ignore")
+    p = Path(path)
+    with p.open("rb") as f:
+        is_pdf = f.read(5) == b"%PDF-"
+    if is_pdf:
+        return "\n".join(page.extract_text() or "" for page in PdfReader(str(p)).pages)
+    return p.read_text(errors="ignore")
 
 
 def chunk(text: str, size: int = CHUNK_SIZE, overlap: int = OVERLAP) -> list[str]:
@@ -102,15 +105,15 @@ def retrieve(db: Session, question: str, k: int = TOP_K) -> list[DocumentChunk]:
     return list(db.scalars(statement))
 
 def answer(db: Session, message: str, history: list):
-    count = db.scalars(select(func.count()).select_from(DocumentChunk))
+    count = db.scalar(select(func.count()).select_from(DocumentChunk))
 
     if count == 0:
         yield "Upload and index some documents first"
         return
     
-    hits = retrieve(message)
+    hits = retrieve(db, message)
 
-    context = "\n\n---\n\n".join(doc for doc, _ in hits)
+    context = "\n\n---\n\n".join(hit.content for hit in hits)
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT.format(context=context)},
         {"role": "user", "content": message},
@@ -123,7 +126,8 @@ def answer(db: Session, message: str, history: list):
         yield text
     
     sources = "\n".join(
-        f"- **{m['source']}** (chunk {m['chunk']}): {d[:120].replace(chr(10), ' ')}..."
-        for d, m in hits
+    f"- File {hit.stored_file_id} (chunk {hit.chunk_index}): "
+    f"{hit.content[:120].replace(chr(10), ' ')}..."
+    for hit in hits
     )
     yield f"{text}\n\n---\n**Sources**\n{sources}"
