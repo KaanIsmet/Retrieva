@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom'
 import logo from '../assets/Retrieva.svg'
 
 const links = [
-  { label: 'How it works', to: '/#how-it-works' },
-  { label: 'Recruiting guide', to: '/#recruiting-guide' },
-  { label: 'For educators', to: '/#for-educators' },
+  { label: 'How it works', to: '/how-it-works' },
+  { label: 'Refferal Guide', to: '/refferal-guide' },
 ]
 
 export default function Navbar() {
@@ -37,7 +36,7 @@ export default function Navbar() {
 
         <div className="flex items-center justify-self-end gap-5">
           <Link
-            to="/#login"
+            to="/login"
             className="hidden text-sm text-[var(--text-h)] no-underline hover:text-[var(--text-muted)] sm:inline"
           >
             Log in

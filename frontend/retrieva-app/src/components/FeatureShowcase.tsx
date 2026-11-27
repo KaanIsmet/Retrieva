@@ -38,7 +38,7 @@ export default function FeatureShowcase() {
           <Citation>1</Citation> <Citation>2</Citation>
         </div>
         <div className="mt-3 text-xs text-[var(--text-muted)]">
-          train.py:18–42 · 12 commits early · tests <Citation>3</Citation>
+          train.py:18-42 · 12 commits early · tests <Citation>3</Citation>
         </div>
       </article>
 
@@ -137,7 +137,7 @@ export function FeatureShowcase_firstSection() {
           <Citation>1</Citation> <Citation>2</Citation>
         </div>
         <div className="mt-3 text-xs text-[var(--text-muted)]">
-          train.py:18–42 · 12 commits early · tests <Citation>3</Citation>
+          train.py:18-42 · 12 commits early · tests <Citation>3</Citation>
         </div>
       </article>
 

@@ -94,14 +94,14 @@ main {
   padding: var(--section-padding-y) var(--section-padding-x);
 }
 
-h1,
+/* h1,
 h2,
 h3 {
   font-family: var(--heading);
   font-weight: 600;
   color: var(--text-h);
   text-wrap: balance;
-}
+} */
 
 h1 {
   font-size: clamp(2.25rem, 5vw, 3.5rem);

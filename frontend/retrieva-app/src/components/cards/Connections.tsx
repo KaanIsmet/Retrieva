@@ -7,7 +7,7 @@ export default function Connections() {
         <h3>What does a
         referral actually do?</h3>
         <p>Learn how to ask, what to share,
-        and what a referral can’t promise.</p>
+        and what a referral can't promise.</p>
       </div>
     </Card>
   )
