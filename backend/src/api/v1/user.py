@@ -4,9 +4,10 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+
 from database import get_db
 from models.user import User
-from schemas.user import UserCreate, UserRead
+from schemas.user import UserCreate, UserRead, UserLogin
 
 user_router = APIRouter(prefix="/user", tags=["user"])
 password_hash = PasswordHash.recommended()
@@ -44,5 +45,21 @@ def get_user(user_id, db: Session = Depends(get_db)) -> User:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Unable to find user by id"
+        )
+    return user
+
+
+@user_router.post("/login", response_model=UserRead)
+def login_user(user: UserLogin, db: Session = Depends(get_db)) -> User:
+    user = db.scalar(select(User).where(User.username == user.username))
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username or password"
+        )
+    if not password_hash.verify(user.hashed_password, user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username or password"
         )
     return user

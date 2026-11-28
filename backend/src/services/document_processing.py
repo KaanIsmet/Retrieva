@@ -1,6 +1,6 @@
 from pathlib import Path
-
-import ollama
+import os
+from openai import OpenAI
 from pypdf import PdfReader
 from sqlalchemy import delete, select, func
 from sqlalchemy.orm import Session
@@ -9,10 +9,13 @@ from sqlalchemy.orm import Session
 from models.document_chunk import DocumentChunk
 from models.stored_file import StoredFile
 
-LLM_MODEL = "llama3.2"            # ollama pull llama3.2
-EMBED_MODEL = "nomic-embed-text"  # ollama pull nomic-embed-text
+LLM_MODEL = os.getenv("OPENAI_CHAT_MODEL")
+EMBED_MODEL = os.getenv("OPENAI_EMBED_MODEL")
+EMBED_DIMENSIONS = 1536
 CHUNK_SIZE, OVERLAP, TOP_K = 800, 150, 4
 UPLOAD_DIR = Path("uploads")
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 SYSTEM_PROMPT = (
     "Answer the question using ONLY the context below. "
@@ -39,7 +42,14 @@ def chunk(text: str, size: int = CHUNK_SIZE, overlap: int = OVERLAP) -> list[str
 
 
 def embed(texts: list[str]) -> list[list[float]]:
-    return ollama.embed(model=EMBED_MODEL, input=texts).embeddings
+    response = client.embeddings.create(
+        model=EMBED_MODEL,
+        input=texts,
+        dimensions=EMBED_DIMENSIONS,
+    )
+
+    ordered_embeddings = sorted(response.data, key=lambda x: x.index)
+    return [embedding.embedding for embedding in ordered_embeddings]
 
 
 def index_files(db: Session, paths: list[str] | None) -> str:
@@ -121,8 +131,8 @@ def answer(db: Session, message: str, history: list):
 
     text = ""
 
-    for part in ollama.chat(model=LLM_MODEL, messages=messages ,stream=True):
-        text += part["message"]["content"]
+    for part in client.chat.completions.create(model=LLM_MODEL, messages=messages ,stream=True):
+        text += part.choices[0].delta.content or ""
         yield text
     
     sources = "\n".join(
